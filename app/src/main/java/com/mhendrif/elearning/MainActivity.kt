@@ -1,8 +1,12 @@
 package com.mhendrif.elearning
 
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -23,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -30,10 +35,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mhendrif.elearning.component.Banner
+import com.mhendrif.elearning.component.Buttons
+import com.mhendrif.elearning.component.NameProfile
+import com.mhendrif.elearning.component.Title
 
-class MainActivity: AppCompatActivity() {
+class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        setContent {
+            MyUI()
+        }
     }
 }
 
@@ -65,9 +81,14 @@ fun MyUI() {
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
-            .padding(paddingValues = it)
+            .padding(paddingValues = it),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            NameProfile()
+            Title()
+            Buttons()
+            Banner()
         }
     }
 }
@@ -78,7 +99,7 @@ fun BottomBar() {
     val context = LocalContext.current.applicationContext
     var selectedItem by remember { mutableStateOf("Profile") }
 
-    BottomAppBar(cutoutShape = CircleShape, backgroundColor = Color.White, elevation = 3.dp) {
+    BottomAppBar(cutoutShape = CircleShape, backgroundColor = Color(android.graphics.Color.parseColor("#f8f8f8")), elevation = 3.dp) {
         bottomMenuItems.forEachIndexed() { index, bottomMenuItem ->
             if(index == 2) {
                 BottomNavigationItem(
